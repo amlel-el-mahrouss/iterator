@@ -109,6 +109,7 @@ int main()
       boost::make_transform_iterator(ints.end(), truetor), 3, truetor(BOOST_NIL_TRUETOR));
 
       test_constrain_distance(&ptr1, &ptr2, 3, !expected);
+      test_constrain_distance(ptr1, ptr2, 3, !expected);
       
       test_constrain_distance(nullptr, nullptr, 0, !expected);
     }
