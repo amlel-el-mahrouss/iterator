@@ -13,6 +13,9 @@
 #include <boost/iterator/distance.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
+#define BOOST_TEST_DISTANCE (-1)
+#define BOOST_TEST_DIFF_DISTANCE (-2)
+
 int twice(int x) { return x + x; }
 
 template <typename Iterator>
@@ -25,12 +28,12 @@ void test_distance(Iterator it_from, Iterator it_to, int n)
 struct Foo
 {
     friend BOOST_CXX14_CONSTEXPR
-    std::ptrdiff_t distance(Foo const &, Foo const &) { return -1; }
+    std::ptrdiff_t distance(Foo const &, Foo const &) { return BOOST_TEST_DISTANCE; }
 };
 
 namespace boost 
 {
-    static BOOST_CXX14_CONSTEXPR std::ptrdiff_t distance(Foo const &, Foo const &)  { return -1; }
+    static BOOST_CXX14_CONSTEXPR std::ptrdiff_t distance(Foo const &, Foo const &)  { return BOOST_TEST_DIFF_DISTANCE; }
 } // namespace boost
 
 int main()
@@ -98,7 +101,7 @@ int main()
         auto expected = ::boost::distance(Foo{}, Foo{});
         auto right_result = distance(Foo{}, Foo{});
 
-        BOOST_TEST(expected == right_result);
+        BOOST_TEST(expected != right_result);
     }
     return boost::report_errors();
 }
