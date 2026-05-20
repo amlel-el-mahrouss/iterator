@@ -24,6 +24,8 @@ void test_distance(Iterator it_from, Iterator it_to, int n)
 // Definitely not an iterator.
 struct Foo
 {
+    using difference_type = std::ptrdiff_t;
+
     constexpr friend
     std::ptrdiff_t distance(Foo const &, Foo const &) { return -1; }
 };
@@ -89,16 +91,13 @@ int main()
         );
     }
 
-    /// constraint distance tests
     {
-        boost::container::slist<int> ints(ptr1, ptr2);
-    }
+        using ::boost::distance;
 
-    {
-        // Make boost::distance visible since we're not actually in the boost namespace here.
-        using boost::distance;
-        auto result = distance(Foo{}, Foo{});
-        BOOST_TEST(result == -1);
+        auto expected = ::boost::distance(Foo{}, Foo{});
+        auto right_result = distance(Foo{}, Foo{});
+
+        BOOST_TEST(expected == right_result);
     }
     return boost::report_errors();
 }
