@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/iterator/iterator_traits.hpp>
 #include <cstddef>
 #include <vector>
 #include <list>
@@ -24,9 +25,7 @@ void test_distance(Iterator it_from, Iterator it_to, int n)
 // Definitely not an iterator.
 struct Foo
 {
-    using difference_type = std::ptrdiff_t;
-
-    constexpr friend
+    friend BOOST_CXX14_CONSTEXPR
     std::ptrdiff_t distance(Foo const &, Foo const &) { return -1; }
 };
 
