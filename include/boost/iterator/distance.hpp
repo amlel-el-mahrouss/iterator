@@ -1,4 +1,5 @@
 // Copyright (C) 2017 Michel Morin.
+// Copyright (C) 2026 Jeremy W. Murphy
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
@@ -8,10 +9,11 @@
 #define BOOST_ITERATOR_DISTANCE_HPP
 
 #include <boost/config.hpp>
-#include <boost/core/enable_if.hpp>
 #include <boost/iterator/is_iterator.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+
+#include <type_traits>
 
 namespace boost {
 namespace iterators {
@@ -43,8 +45,10 @@ namespace distance_adl_barrier {
 
 template< typename SinglePassIterator >
 inline BOOST_CXX14_CONSTEXPR
-typename boost::enable_if< boost::is_iterator< SinglePassIterator >,
-                           typename iterator_difference< SinglePassIterator >::type >::type
+typename std::enable_if<
+    boost::is_iterator< SinglePassIterator >::value,
+    iterator_difference< SinglePassIterator >
+>::type::type
 distance(SinglePassIterator first, SinglePassIterator last)
 {
     return detail::distance_impl(first, last, typename iterator_traversal< SinglePassIterator >::type());

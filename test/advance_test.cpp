@@ -20,6 +20,18 @@ void test_advance(Iterator it_from, Iterator it_to, int n)
     BOOST_TEST(it_from == it_to);
 }
 
+// Definitely not an iterator
+struct Foo
+{
+    int x = 0;
+
+    friend
+    void advance(Foo &value, int n)
+    {
+        value.x += 10 * n;
+    }
+};
+
 int main()
 {
     int array[3] = {1, 2, 3};
@@ -87,5 +99,12 @@ int main()
         );
     }
 
+    {
+        using boost::advance;
+        Foo bar;
+        advance(bar, 3);
+        BOOST_TEST(bar.x == 30);
+    }
+    
     return boost::report_errors();
 }
